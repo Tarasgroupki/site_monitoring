@@ -42,7 +42,7 @@ class SiteController extends APIBaseController
 
     public function update($id,Request $request)
     {
-        $input = $request->all()[0];
+        $input = $request->all();
         $validator = Validator::make($input, [
             'link' => 'string',
             'email' => 'string',
@@ -54,7 +54,7 @@ class SiteController extends APIBaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());
         }
-        $client = Client::find($id);
+        $client = Sites::find($id);
         $client->link = $input['link'];
         $client->email = $input['email'];
         $client->period = $input['period'];
