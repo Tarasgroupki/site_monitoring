@@ -8,6 +8,8 @@ import {BootstrapTable,
     TableHeaderColumn} from 'react-bootstrap-table';
 //import Dialog from 'react-bootstrap-dialog'
 import Modal from 'react-modal';
+import Popover from 'react-simple-popover';
+//import Select from 'react-bootstrap-select';
 //import Table from './Table';
 //import { BrowserRouter as Router, Route, Link } from "react-router";
 //import PropTypes from 'prop-types';
@@ -29,23 +31,33 @@ class App extends Component {
 
     constructor(props) {
         super(props);
+        let username = JSON.parse(JSON.stringify(localStorage.getItem('username')));
         this.state = {
             items: [],
+           // users: [],
             isLoaded: false,
-            link: '',
             email: '',
-            period: '',
+            password: '',
+            username: username,
             selected: [],
+            open: false,
             modalIsOpen: false
         };
 
-        this.handleChangeLink = this.handleChangeLink.bind(this);
         this.handleChangeEmail = this.handleChangeEmail.bind(this);
-        this.handleChangePeriod = this.handleChangePeriod.bind(this);
+        this.handleChangePassword = this.handleChangePassword.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.openModal = this.openModal.bind(this);
         this.afterOpenModal = this.afterOpenModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
+    }
+
+    handleClick(e) {
+        this.setState({open: !this.state.open});
+    }
+
+    handleClose(e) {
+        this.setState({open: false});
     }
 
     openModal() {
@@ -61,37 +73,47 @@ class App extends Component {
         this.setState({modalIsOpen: false});
     }
 
-    handleChangeLink(event) {
+    handleChangeEmail(event) {
        // console.log(event.target.value);
         this.setState({
-            link: event.target.value,
+            email: event.target.value,
         });
     }
 
-    handleChangeEmail(event) {
+    handleChangePassword(event) {
       //  console.log(event.target.value);
         this.setState({
-             email: event.target.value
-        });
-    }
-
-    handleChangePeriod(event) {
-        this.setState({
-             period: event.target.value
+             password: event.target.value
         });
     }
 
     handleSubmit(event) {
-        fetch('http://www.site-monitoring.ua/blog/public/api/site', {
+        fetch('http://www.site-monitoring.ua/blog/public/api/auth', {
             method: 'post',
             headers : {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({'link': this.state.link, 'email': this.state.email, 'period': this.state.period, 'user_id': 1, 'date_last_check': '2018-06-05', 'status': '0'})
-        }).then(res => res.json()).then(function() {
+            body: JSON.stringify({'email': this.state.email, 'password': this.state.password})
+        }).then(res => res.json()).then(function(result) {
+            console.log(result['data']['user']);
+            if(result['data'] != null) {
+                localStorage.setItem('token', result['data']['token']);
+                localStorage.setItem('userId', result['data']['user']['id']);
+                localStorage.setItem('username', result['data']['user']['name']);
+            }
         });
-      //  event.componentDidMount();
+        if(localStorage.getItem('token')) {
+            window.location.reload();
+        }
+        event.preventDefault();
+    }
+
+    removeItem(event) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        localStorage.removeItem('userId');
+        window.location.reload();
         event.preventDefault();
     }
 
@@ -103,13 +125,32 @@ class App extends Component {
                 items: json,
             })
         });
+      /*  fetch('http://www.site-monitoring.ua/blog/public/api/users',{method: 'get'}).then(res => res.json()).then(json => {
+            this.setState({
+                isLoaded: true,
+                users: json,
+            })
+        });*/
+
 
     }
+
     componentWillMount() {
         Modal.setAppElement('body');
     }
 
     render() {
+       /* var user = [];
+        console.log(this.state.users);
+        console.log(this.state.users['data']);
+        for(var i = 0; i < 1; i++) {
+            if(this.state.users['data'] != null) {
+                //console.log(this.state.users['data'][i]['name']);
+                user[this.state.users['data'][i]['id']] = this.state.users['data'][i]['name'];
+            }
+        }*/
+       // console.log(user[1]);
+        //this.getUsers();
         var { isLoaded, items } = this.state;
         const selectRowProp = {
             mode: 'checkbox',
@@ -182,13 +223,32 @@ class App extends Component {
             afterInsertRow: onAfterInsertRow   // A hook for after insert rows
         };
 
+
+//console.log(this.state.user);
  return (
      <div className="App">
        <header className="App-header">
          <img src={logo} className="App-logo" alt="logo" />
          <h1 className="App-title">Welcome to React</h1>
            <div>
-           <button className="btn btn-info" onClick={this.openModal}>Login</button>
+               {
+                   localStorage.getItem('token') == null ?
+                   <button className="btn btn-info" onClick={this.openModal}>Login</button>
+                       :
+                       <a
+                           href="#"
+                           className="button"
+                           ref="target"
+                           onClick={this.handleClick.bind(this)}>{this.state.username}</a>
+               }
+               <Popover
+               placement='bottom'
+               container={this}
+               target={this.refs.target}
+               show={this.state.open}
+               onHide={this.handleClose.bind(this)} >
+               <p><input type="submit" onClick={this.removeItem} value="Logout" /></p>
+           </Popover>
            <Modal
                isOpen={this.state.modalIsOpen}
                onAfterOpen={this.afterOpenModal}
@@ -198,50 +258,44 @@ class App extends Component {
            >
                <form onSubmit={this.handleSubmit}>
                    <h1>AUTHENTICATION</h1>
-                   <table className="Form-table">
-                       <tbody>
-                       <tr>
-                           <td>Link:</td>
-                           <td><input className ="form-control" name="link" type="text" value={this.state.link} onChange={this.handleChangeLink} /></td>
-                       </tr>
-                       <tr>
-                           <td>Email:</td>
-                           <td><input className ="form-control" type="text" value={this.state.email} onChange={this.handleChangeEmail} /></td>
-                       </tr>
-                       <tr>
-                           <td>Period:</td>
-                           <td><input className ="form-control" type="number" value={this.state.period} onChange={this.handleChangePeriod} /></td>
-                       </tr>
-                       </tbody>
-                   </table>
+                   <div className="form-group">
+                       <label>Email:</label>
+                   <input className =" form-control editor edit-text" name="email" type="text" value={this.state.email} onChange={this.handleChangeEmail} />
+                   </div>
+                   <div className="form-group">
+                       <label>Password:</label>
+                       <input className =" form-control editor edit-text" type="password" value={this.state.password} onChange={this.handleChangePassword} />
+                   </div>
                    <input className="btn btn-success" type="submit" value="Submit" />
                </form>
                <h2 ref={subtitle => this.subtitle = subtitle}>Hello</h2>
                <button onClick={this.closeModal}>close</button>
-               <div>I am a modal</div>
            </Modal>
        </div>
        </header>
-                   <BootstrapTable data={items['data']} insertRow={ true } selectRow={ selectRowProp } deleteRow={ true } cellEdit={ cellEditProp } options={ options }>
-                   <TableHeaderColumn isKey dataField='id'>
-                       ID
-                   </TableHeaderColumn>
-                   <TableHeaderColumn dataField='link'>
-                       Link
-                   </TableHeaderColumn>
-                   <TableHeaderColumn dataField='email'>
-                       Email
-                   </TableHeaderColumn>
-                   <TableHeaderColumn dataField='period'>
-                       Period
-                   </TableHeaderColumn>
-                   <TableHeaderColumn dataField='user_id'>
-                       UserID
-                   </TableHeaderColumn>
-                   <TableHeaderColumn dataField='status'>
-                       Status
-                   </TableHeaderColumn>
-               </BootstrapTable>
+         {
+             localStorage.getItem('token') == null ?
+                 'Please log in to administrate this program!'
+                 : <BootstrapTable data={items['data']} insertRow={ true } selectRow={ selectRowProp } deleteRow={ true } cellEdit={ cellEditProp } options={ options }>
+                     <TableHeaderColumn isKey dataField='id' autoValue={ true }>
+                         ID
+                     </TableHeaderColumn>
+                     <TableHeaderColumn dataField='link'>
+                         Link
+                     </TableHeaderColumn>
+                     <TableHeaderColumn dataField='email'>
+                         Email
+                     </TableHeaderColumn>
+                     <TableHeaderColumn dataField='period'>
+                         Period
+                     </TableHeaderColumn>
+                     <TableHeaderColumn dataField='user_id' editable={ { type: 'hidden', defaultValue: localStorage.getItem('userId') } } >
+                     </TableHeaderColumn>
+                     <TableHeaderColumn dataField='status' autoValue={ true }>
+                         Status
+                     </TableHeaderColumn>
+                 </BootstrapTable>
+         }
      </div>
    );
  }
