@@ -26,7 +26,18 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-
+.image_avatar {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.inputs {
+  border: 2px solid red;
+}
+.error_message {
+  color: red;
+}
 /*th,td {
   width:200px;
   border: 1px solid black;

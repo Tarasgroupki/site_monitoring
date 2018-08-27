@@ -27,10 +27,48 @@ const customStyles = {
     }
 };
 
+function EmailValidator(value) {
+    const response = { isValid: true, notification: { type: 'success', msg: '', title: '' } };
+    if (!value) {
+        response.isValid = false;
+        response.notification.type = 'error';
+        response.notification.msg = 'Value must be inserted';
+        response.notification.title = 'Requested Value';
+    } else if (value.length < 10) {
+        response.isValid = false;
+        response.notification.type = 'error';
+        response.notification.msg = 'Value must have 10+ characters';
+        response.notification.title = 'Invalid Value';
+    } else if (value.search('@') === -1) {
+        response.isValid = false;
+        response.notification.type = 'error';
+        response.notification.msg = 'Value must have symbol @';
+        response.notification.title = 'Invalid Value';
+    }
+    return response;
+}
+
+function LinkValidator(value) {
+    const response = { isValid: true, notification: { type: 'success', msg: '', title: '' } };
+    if (!value) {
+        response.isValid = false;
+        response.notification.type = 'error';
+        response.notification.msg = 'Value must be inserted';
+        response.notification.title = 'Requested Value';
+    } else if (value.length < 10) {
+        response.isValid = false;
+        response.notification.type = 'error';
+        response.notification.msg = 'Value must have 10+ characters';
+        response.notification.title = 'Invalid Value';
+    }
+    return response;
+}
+
 class App extends Component {
 
     constructor(props) {
         super(props);
+        let avatar = JSON.parse(JSON.stringify(localStorage.getItem('avatar')));
         let username = JSON.parse(JSON.stringify(localStorage.getItem('username')));
         this.state = {
             items: [],
@@ -38,8 +76,11 @@ class App extends Component {
             isLoaded: false,
             email: '',
             password: '',
+            avatar: avatar,
             username: username,
             selected: [],
+            error: '',
+            err_class: 'form-control editor edit-text',
             open: false,
             modalIsOpen: false
         };
@@ -66,7 +107,7 @@ class App extends Component {
 
     afterOpenModal() {
         // references are now sync'd and can be accessed.
-        this.subtitle.style.color = '#f00';
+      //  this.subtitle.style.color = '#f00';
     }
 
     closeModal() {
@@ -74,14 +115,12 @@ class App extends Component {
     }
 
     handleChangeEmail(event) {
-       // console.log(event.target.value);
         this.setState({
             email: event.target.value,
         });
     }
 
     handleChangePassword(event) {
-      //  console.log(event.target.value);
         this.setState({
              password: event.target.value
         });
@@ -96,15 +135,19 @@ class App extends Component {
             },
             body: JSON.stringify({'email': this.state.email, 'password': this.state.password})
         }).then(res => res.json()).then(function(result) {
-            console.log(result['data']['user']);
             if(result['data'] != null) {
                 localStorage.setItem('token', result['data']['token']);
                 localStorage.setItem('userId', result['data']['user']['id']);
                 localStorage.setItem('username', result['data']['user']['name']);
+                localStorage.setItem('avatar', result['data']['user']['avatar']);
+                window.location.reload();
             }
         });
-        if(localStorage.getItem('token')) {
-            window.location.reload();
+        if(!localStorage.getItem('token')) {
+            this.setState({
+                error: 'Not valid login or password!',
+                err_class: 'inputs form-control editor edit-text'
+            });
         }
         event.preventDefault();
     }
@@ -113,6 +156,7 @@ class App extends Component {
         localStorage.removeItem('token');
         localStorage.removeItem('username');
         localStorage.removeItem('userId');
+        localStorage.removeItem('avatar');
         window.location.reload();
         event.preventDefault();
     }
@@ -184,7 +228,7 @@ class App extends Component {
         function onAfterDeleteRow(rowKeys) {
             var myarr = rowKeys.toString().split(",");
             for(var i = 0; i < myarr.length; i++) {
-                fetch('http://www.site-monitoring.ua/blog/public/api/site'+'/'+myarr[i], {
+                fetch('http://www.site-monitoring.ua/blog/public/api/site/'+myarr[i], {
                     method: 'delete',
                     headers : {
                         'Content-Type': 'application/json',
@@ -200,7 +244,7 @@ class App extends Component {
 
         function onAfterSaveCell(row, cellName, cellValue) {
             alert(`Save cell ${cellName} with value ${cellValue}`);
-            fetch('http://www.site-monitoring.ua/blog/public/api/site'+'/'+row["id"], {
+            fetch('http://www.site-monitoring.ua/blog/public/api/site/'+row["id"], {
                 method: 'put',
                 body: JSON.stringify(row),
                 headers: {
@@ -224,7 +268,6 @@ class App extends Component {
         };
 
 
-//console.log(this.state.user);
  return (
      <div className="App">
        <header className="App-header">
@@ -239,7 +282,7 @@ class App extends Component {
                            href="#"
                            className="button"
                            ref="target"
-                           onClick={this.handleClick.bind(this)}>{this.state.username}</a>
+                           onClick={this.handleClick.bind(this)}> <img className = "image_avatar" src={"http://www.site-monitoring.ua/blog/public/"+this.state.avatar} alt="" /></a>
                }
                <Popover
                placement='bottom'
@@ -247,8 +290,16 @@ class App extends Component {
                target={this.refs.target}
                show={this.state.open}
                onHide={this.handleClose.bind(this)} >
+                   <div>
+                   {
+                       localStorage.getItem('token') == null ?
+                           null
+                           : this.state.username
+                   }
+                   <p><a href="/profile">Profile</a></p>
                <p><input type="submit" onClick={this.removeItem} value="Logout" /></p>
-           </Popover>
+                   </div>
+               </Popover>
            <Modal
                isOpen={this.state.modalIsOpen}
                onAfterOpen={this.afterOpenModal}
@@ -260,30 +311,32 @@ class App extends Component {
                    <h1>AUTHENTICATION</h1>
                    <div className="form-group">
                        <label>Email:</label>
-                   <input className =" form-control editor edit-text" name="email" type="text" value={this.state.email} onChange={this.handleChangeEmail} />
+                   <input className = {this.state.err_class} name="email" pattern="[^ @]*@[^ @]*" type="text" value={this.state.email} onChange={this.handleChangeEmail} />
                    </div>
                    <div className="form-group">
                        <label>Password:</label>
-                       <input className =" form-control editor edit-text" type="password" value={this.state.password} onChange={this.handleChangePassword} />
+                       <input className = {this.state.err_class} type="password" value={this.state.password} onChange={this.handleChangePassword} />
                    </div>
                    <input className="btn btn-success" type="submit" value="Submit" />
                </form>
-               <h2 ref={subtitle => this.subtitle = subtitle}>Hello</h2>
+               <div class="error_message">
+                   <h2>{this.state.error}</h2>
+               </div>
                <button onClick={this.closeModal}>close</button>
            </Modal>
        </div>
        </header>
          {
              localStorage.getItem('token') == null ?
-                 'Please log in to administrate this program!'
-                 : <BootstrapTable data={items['data']} insertRow={ true } selectRow={ selectRowProp } deleteRow={ true } cellEdit={ cellEditProp } options={ options }>
+                 <h2>Please log in to administrate this program!</h2>
+                 : <BootstrapTable data={items['data']} insertRow={ true } selectRow={ selectRowProp } deleteRow={ true } cellEdit={ cellEditProp } options={ options } pagination>
                      <TableHeaderColumn isKey dataField='id' autoValue={ true }>
                          ID
                      </TableHeaderColumn>
-                     <TableHeaderColumn dataField='link'>
+                     <TableHeaderColumn dataField='link' editable={ { validator: LinkValidator } }>
                          Link
                      </TableHeaderColumn>
-                     <TableHeaderColumn dataField='email'>
+                     <TableHeaderColumn dataField='email' editable={ { validator: EmailValidator } }>
                          Email
                      </TableHeaderColumn>
                      <TableHeaderColumn dataField='period'>
