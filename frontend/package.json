@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "history": "^4.7.2",
     "react": "^16.4.2",
     "react-bootstrap-dialog": "^0.10.0",
     "react-bootstrap-select": "^0.14.0",
@@ -11,6 +12,7 @@
     "react-modal": "^3.5.1",
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "react-simple-popover": "^0.2.4",
     "redux": "^4.0.0"

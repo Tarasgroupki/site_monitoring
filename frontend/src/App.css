@@ -38,6 +38,14 @@
 .error_message {
   color: red;
 }
+.profile_img {
+    height: 300px;
+    width: 400px
+}
+.profile_field {
+    margin-left:35%;
+    width: 400px;
+}
 /*th,td {
   width:200px;
   border: 1px solid black;

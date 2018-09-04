@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 //import { connect } from 'react-redux';
-import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
+import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 //import '../node_modules/react-bootstrap-table/css/react-bootstrap-table.css';
 import {BootstrapTable,
     TableHeaderColumn} from 'react-bootstrap-table';
@@ -163,12 +163,21 @@ class App extends Component {
 
     componentDidMount() {
 
-        fetch('http://www.site-monitoring.ua/blog/public/api/site',{method: 'get'}).then(res => res.json()).then(json => {
+        if(localStorage.getItem('token') != null)
+        {
+
+        fetch('http://www.site-monitoring.ua/blog/public/api/site',{method: 'get',headers : {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }}).then(res => res.json()).then(json => {
             this.setState({
                 isLoaded: true,
                 items: json,
             })
         });
+
+        }
       /*  fetch('http://www.site-monitoring.ua/blog/public/api/users',{method: 'get'}).then(res => res.json()).then(json => {
             this.setState({
                 isLoaded: true,
@@ -218,7 +227,8 @@ class App extends Component {
                 method: 'post',
                 headers : {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
                 },
                 body: JSON.stringify(row)
             }).then(res => res.json()).then(function() {
@@ -232,7 +242,8 @@ class App extends Component {
                     method: 'delete',
                     headers : {
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        'Accept': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
                     }
                 }).then(response =>
                     response.json().then(json => {
@@ -249,7 +260,8 @@ class App extends Component {
                 body: JSON.stringify(row),
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
                 }
             })
                 .then(response =>
@@ -319,7 +331,7 @@ class App extends Component {
                    </div>
                    <input className="btn btn-success" type="submit" value="Submit" />
                </form>
-               <div class="error_message">
+               <div className="error_message">
                    <h2>{this.state.error}</h2>
                </div>
                <button onClick={this.closeModal}>close</button>

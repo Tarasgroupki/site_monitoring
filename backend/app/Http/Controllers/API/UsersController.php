@@ -30,16 +30,16 @@ class UsersController extends APIBaseController
     public function actionLogin(Request $request) {
         $input = $request->all();
 
-        if(Auth::attempt(['email' => $input[0]['email'], 'password' => $input[0]['password']])) {
+        if(Auth::attempt(['email' => $input['email'], 'password' => $input['password']])) {
             $user = Auth::user();
-            $success['permissions'] = $user->getAllPermissions();
+           /* $success['permissions'] = $user->getAllPermissions();
             foreach ($success['permissions'] as $key => $permission) {
                 $permissions[$key] = str_slug($permission['name']);
-            }
+            }*/
             //$scopes = implode(",",$permissions);
-            $success['token'] = $user->createToken('TaskTrack',  $permissions)->accessToken;
+            $success['token'] = $user->createToken('TaskTrack')->accessToken;
             $success['user'] = $user;
-            $success['permissions'] = $permissions;
+            //$success['permissions'] = $permissions;
 
             return $this->sendResponse($success, 'User is authentificate successfully!');
 
@@ -108,7 +108,7 @@ class UsersController extends APIBaseController
         $filename = $file_name;
         $uploadSuccess = $file->move($destinationPath, $filename);
 
-        return $this->sendResponse(null, 'File upload successfully.');
+        return $this->sendResponse($input, 'File upload successfully.');
     }
 
     public function index()
@@ -244,11 +244,11 @@ class UsersController extends APIBaseController
 
         $validator = Validator::make($input, [
             'name' => 'string|max:255',
-            'email' => 'string|email|max:255|unique:users',
-            'password' => '',
-            'address' => 'string',
-            'work_number' => 'string',
-            'personal_number' => 'string'
+            'email' => 'string|email|max:255',
+            //'password' => '',
+            //'address' => 'string',
+            //'work_number' => 'string',
+           // 'personal_number' => 'string'
         ]);
 
 
@@ -263,14 +263,14 @@ class UsersController extends APIBaseController
         }
 
 
-        $user->name = $input[0]['name'];
-        $user->email = $input[0]['email'];
-        if(isset($input[0]['password'])): $user->password = bcrypt($input[0]['password']);
-        endif;
-        $user->address = $input[0]['address'];
-        $user->work_number = $input[0]['work_number'];
-        $user->personal_number = $input[0]['personal_number'];
-        (isset($input[0]['image_path'])) ? $user->image_path = 'images/'.$input[0]['image_path'] : '';
+        $user->name = $input['name'];
+        $user->email = $input['email'];
+        //if(isset($input[0]['password'])): $user->password = bcrypt($input[0]['password']);
+        //endif;
+        //$user->address = $input[0]['address'];
+        //$user->work_number = $input[0]['work_number'];
+        //$user->personal_number = $input[0]['personal_number'];
+        //(isset($input['image_path'])) ? $user->image_path = 'images/'.$input[0]['image_path'] : '';
         $user->save();
 
 

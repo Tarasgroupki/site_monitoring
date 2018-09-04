@@ -25,7 +25,7 @@ class SiteController extends APIBaseController
             'period' => 'integer',
             'date_last_check' => 'string',
             'status' => 'string',
-            'user_id' => 'integer'
+            //'user_id' => 'integer'
         ]);
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());
