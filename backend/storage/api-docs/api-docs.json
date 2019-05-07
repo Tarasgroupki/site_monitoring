@@ -1,0 +1,56 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "L5 Swagger API",
+        "description": "L5 Swagger API description",
+        "contact": {
+            "email": "darius@matulionis.lt"
+        },
+        "version": "1.0.0"
+    },
+    "host": "task-treking/public/",
+    "basePath": "/api",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "paths": {
+        "/auth": {
+            "post": {
+                "tags": [
+                    "Authorization"
+                ],
+                "summary": "Sample",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "sign in",
+                        "schema": "",
+                        "default": [
+                            {
+                                "email": "taras2andry@mail.ru",
+                                "password": "1234sstr"
+                            }
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {},
+    "securityDefinitions": {
+        "passport": {
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "/oauth2/authorize",
+            "tokenUrl": "/oauth/token",
+            "scopes": {}
+        }
+    }
+}

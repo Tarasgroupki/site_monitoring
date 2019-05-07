@@ -1,0 +1,448 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "L5 Swagger API",
+        "description": "L5 Swagger API description",
+        "contact": {
+            "email": "darius@matulionis.lt"
+        },
+        "version": "1.0.0"
+    },
+    "host": "www.site-monitoring.ua/blog/public/",
+    "basePath": "/api",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "paths": {
+        "/site": {
+            "get": {
+                "tags": [
+                    "Sites"
+                ],
+                "summary": "Get list of sites",
+                "description": "Returns list of sites",
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Sites"
+                ],
+                "summary": "Create new site",
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "body",
+                        "description": "Site object that needs to be added to the store",
+                        "schema": {
+                            "properties": {
+                                "id": {
+                                    "description": "Class LeadsController",
+                                    "type": "integer"
+                                },
+                                "link": {
+                                    "description": "Class LeadsController",
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "description": "Class LeadsController",
+                                    "type": "string"
+                                },
+                                "period": {
+                                    "description": "Class LeadsController",
+                                    "type": "integer"
+                                },
+                                "date_last_check": {
+                                    "description": "Class LeadsController",
+                                    "type": "string"
+                                },
+                                "status": {
+                                    "description": "Class LeadsController",
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/site/{id}": {
+            "get": {
+                "tags": [
+                    "Sites"
+                ],
+                "summary": "Get sites information",
+                "description": "Returns sites data",
+                "operationId": "getSiteById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Site id",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Sites"
+                ],
+                "summary": "Update new site",
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "body",
+                        "description": "Site object that needs to be added to the store",
+                        "schema": {
+                            "properties": {
+                                "id": {
+                                    "description": "Class LeadsController",
+                                    "type": "integer"
+                                },
+                                "link": {
+                                    "description": "Class LeadsController",
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "description": "Class LeadsController",
+                                    "type": "string"
+                                },
+                                "period": {
+                                    "description": "Class LeadsController",
+                                    "type": "integer"
+                                },
+                                "date_last_check": {
+                                    "description": "Class LeadsController",
+                                    "type": "string"
+                                },
+                                "status": {
+                                    "description": "Class LeadsController",
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/site/{id}": {
+            "delete": {
+                "tags": [
+                    "Sites"
+                ],
+                "summary": "Delete Site",
+                "operationId": "ApiV1DeleteSite",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Delete Site",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        },
+        "/fileUpload": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Upload Image",
+                "parameters": [
+                    {
+                        "name": "file",
+                        "in": "body",
+                        "description": "Uploading image",
+                        "schema": {}
+                    },
+                    {
+                        "name": "additionalMetadata",
+                        "in": "body",
+                        "description": "Additional data to pass to server",
+                        "schema": {}
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get list of users",
+                "description": "Returns list of users",
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/users/profile/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get users information",
+                "description": "Returns users data",
+                "operationId": "getSiteById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User id",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update new user",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "User object that needs to be added to the store",
+                        "schema": {
+                            "properties": {
+                                "id": {
+                                    "description": "Class UsersController",
+                                    "type": "integer"
+                                },
+                                "name": {
+                                    "description": "Class UsersController",
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "description": "Class UsersController",
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "description": "Class UsersController",
+                                    "type": "string"
+                                },
+                                "address": {
+                                    "description": "Class UsersController",
+                                    "type": "string"
+                                },
+                                "work_number": {
+                                    "description": "Class UsersController",
+                                    "type": "string"
+                                },
+                                "personal_number": {
+                                    "description": "Class UsersController",
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/auth": {
+            "post": {
+                "tags": [
+                    "Authorization"
+                ],
+                "summary": "Sample",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "sign in",
+                        "schema": "",
+                        "default": [
+                            {
+                                "email": "taras2andry@mail.ru",
+                                "password": "1234sstr"
+                            }
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Sites": {
+            "description": "Sites",
+            "properties": {
+                "id": {
+                    "description": "Class LeadsController",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "link": {
+                    "description": "Class LeadsController",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "Class LeadsController",
+                    "type": "string"
+                },
+                "period": {
+                    "description": "Class LeadsController",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "date_last_check": {
+                    "description": "Class LeadsController",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "Class LeadsController",
+                    "type": "string",
+                    "enum": [
+                        "\u0412\u0438\u043a\u043e\u043d\u0430\u043d\u043e",
+                        "\u0412\u0438\u043a\u043e\u043d\u0443\u0454\u0442\u044c\u0441\u044f",
+                        "\u041d\u0435 \u0432\u0438\u043a\u043e\u043d\u0443\u0454\u0442\u044c\u0441\u044f"
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "User": {
+            "description": "User",
+            "properties": {
+                "id": {
+                    "description": "Class UsersController",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "name": {
+                    "description": "Class UsersController",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "Class UsersController",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "Class UsersController",
+                    "type": "string"
+                },
+                "address": {
+                    "description": "Class UsersController",
+                    "type": "string"
+                },
+                "work_number": {
+                    "description": "Class UsersController",
+                    "type": "string"
+                },
+                "personal_number": {
+                    "description": "Class UsersController",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
