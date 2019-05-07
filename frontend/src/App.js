@@ -176,7 +176,7 @@ class App extends Component {
                 items: json,
             })
         });
-
+        console.log(localStorage.getItem('token'));
         }
       /*  fetch('http://www.site-monitoring.ua/blog/public/api/users',{method: 'get'}).then(res => res.json()).then(json => {
             this.setState({

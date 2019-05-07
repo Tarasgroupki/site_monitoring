@@ -182,7 +182,7 @@ class Profile extends Component {
                                         null
                                         : this.state.username
                                 }
-                                <p><a href="/profile">Profile</a></p>
+                                <p><a href="/">Main</a></p>
                                 <p><input type="submit" onClick={this.removeItem} value="Logout" /></p>
                             </div>
                         </Popover>
