@@ -163,9 +163,18 @@ name="additionalMetadata",
 class SiteController extends APIBaseController
 {
     public function index() {
-        $sites = Sites::all();
+        $sites = Sites::all()->toArray();
 
-        return $this->sendResponse($sites->toArray(), 'Sites retrieved successfully.');
+        foreach ($sites as $key => $site) {
+            if($site['status'] == 0) {
+                $sites[$key]['status'] = 'Not Working';
+            }
+            else {
+                $sites[$key]['status'] = 'Working';
+            }
+        }
+
+        return $this->sendResponse($sites, 'Sites retrieved successfully.');
     }
 
     public function store(Request $request)
