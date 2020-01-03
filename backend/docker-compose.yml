@@ -1,0 +1,35 @@
+version: "3.3"
+
+services:
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/Nginx.Dockerfile
+    ports:
+      - "8080:80"
+    links:
+      - fpm
+    volumes:
+      - ./:/var/www/laravel-docker
+  fpm:
+    build:
+      context: .
+      dockerfile: docker/Fpm.Dockerfile
+    volumes:
+      - ./:/var/www/laravel-docker
+    links:
+      - db
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    volumes:
+      - ./:/var/lib/mysql/*
+
+  adminer:
+     image: adminer
+     restart: always
+     ports:
+       - 5080:8080
