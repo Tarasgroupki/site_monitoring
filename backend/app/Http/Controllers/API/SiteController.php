@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use App\Sites;
 use Validator;
 
-//use App\Http\Controllers\API\APIBaseController;
-
 /**
  * Class LeadsController
  * @package App\Http\Controllers\API
@@ -186,7 +184,6 @@ class SiteController extends APIBaseController
             'period' => 'integer',
             'date_last_check' => 'string',
             'status' => 'string',
-            //'user_id' => 'integer'
         ]);
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());

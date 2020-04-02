@@ -1,0 +1,5 @@
+node_modules
+/.vscode
+/.git
+src/App.test.js
+src/registerServiceWorker.js

@@ -1,7 +1,6 @@
 import React from 'react';
 import './NotFound.css';
-import { Link } from 'react-router-dom';
-//import PageNotFound from '../assets/images/PageNotFound';
+
 const NotFound = () => (
    <body className="not-found">
     < div className='c'>

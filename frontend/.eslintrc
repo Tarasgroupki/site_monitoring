@@ -1,0 +1,17 @@
+{
+  "parser": "babel-eslint",
+  "extends": [ "eslint:recommended",
+    "plugin:react/recommended"],
+  "rules": {
+    "no-plusplus": [2, { allowForLoopAfterthoughts: true }]
+  },
+  "globals": {
+    "localStorage": true,
+    "fetch": true,
+    "Promise": true,
+    "alert": true,
+    "FormData": true,
+    "process": true,
+    "document": true
+  }
+}

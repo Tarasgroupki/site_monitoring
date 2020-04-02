@@ -12,8 +12,6 @@ use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-//use Spatie\Permission\Models\Role;
-//use Spatie\Permission\Models\Permission;
 use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\API\APIBaseController as APIBaseController;
 
@@ -111,38 +109,28 @@ class UsersController extends APIBaseController
 {
     public $successStatus = 200;
 
-    public function __construct()
-    {
-       // $this->middleware('auth');
-       // $this->middleware('lang');
-    }
+    public function __construct() { }
 
     public function actionLogin(Request $request) {
         $input = $request->all();
 
         if(Auth::attempt(['email' => $input['email'], 'password' => $input['password']])) {
             $user = Auth::user();
-           /* $success['permissions'] = $user->getAllPermissions();
-            foreach ($success['permissions'] as $key => $permission) {
-                $permissions[$key] = str_slug($permission['name']);
-            }*/
-            //$scopes = implode(",",$permissions);
+
             $success['token'] = $user->createToken('TaskTrack')->accessToken;
             $success['user'] = $user;
-            //$success['permissions'] = $permissions;
 
             return $this->sendResponse($success, 'User is authentificate successfully!');
 
         }
         else{
-           //$error['message'] = 'Неправильний логін, або пароль!';
-            return $this->sendResponse(NULL, 'Authentification error!');
+
+            return $this->sendError(NULL, 'Authentification error!');
 
         }
     }
 
     public function actionLogout($id) {
-       // $user = User::find($id);
 
         DB::table('oauth_access_tokens')
             ->where('user_id', $id)
@@ -182,10 +170,7 @@ class UsersController extends APIBaseController
             $user->removeRole($role);
         }
         endif;
-      //  DB::table('oauth_access_tokens')
-        //    ->where('user_id', $id)
-       //     ->update(['revoked' => true]);
-      //  $success['token'] = $user->createToken('TaskTrack',  $permissions)->accessToken;
+
         return $this->sendResponse($roles, 'Roles added to user successfully.');
     }
 
@@ -221,9 +206,6 @@ class UsersController extends APIBaseController
             'name' => 'string|max:255',
             'email' => 'string|email|max:255|unique:users',
             'password' => 'string|min:6|confirmed',
-          //  'address' => 'string',
-        //    'work_number' => 'string',
-       //     'personal_number' => 'string'
         ]);
 
         if($validator->fails()){
@@ -235,12 +217,7 @@ class UsersController extends APIBaseController
             'name' => $input[0]['name'],
             'email' => $input[0]['email'],
             'password' => bcrypt($input[0]['password']),
-          //  'address' => $input[0]['address'],
-           // 'work_number' => $input[0]['work_number'],
-          //  'personal_number' => $input[0]['personal_number'],
-          //  'image_path' => 'images/'.$input[0]['image_path']
         ]);
-       // $user = User::create($input[0]);
 
 
         return $this->sendResponse($user->toArray(), 'User created successfully.');
@@ -335,10 +312,6 @@ class UsersController extends APIBaseController
         $validator = Validator::make($input, [
             'name' => 'string|max:255',
             'email' => 'string|email|max:255',
-            //'password' => '',
-            //'address' => 'string',
-            //'work_number' => 'string',
-           // 'personal_number' => 'string'
         ]);
 
 
@@ -355,12 +328,7 @@ class UsersController extends APIBaseController
 
         $user->name = $input['name'];
         $user->email = $input['email'];
-        //if(isset($input[0]['password'])): $user->password = bcrypt($input[0]['password']);
-        //endif;
-        //$user->address = $input[0]['address'];
-        //$user->work_number = $input[0]['work_number'];
-        //$user->personal_number = $input[0]['personal_number'];
-        //(isset($input['image_path'])) ? $user->image_path = 'images/'.$input[0]['image_path'] : '';
+
         $user->save();
 
 

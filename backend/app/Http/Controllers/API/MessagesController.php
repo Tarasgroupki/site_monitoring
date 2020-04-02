@@ -11,11 +11,7 @@ use App\Http\Controllers\API\APIBaseController as APIBaseController;
 
 class MessagesController extends APIBaseController
 {
-    public function __construct()
-    {
-        //$this->middleware('auth');
-        //$this->middleware('lang');
-    }
+    public function __construct() { }
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +20,7 @@ class MessagesController extends APIBaseController
     public function index()
     {
         $users = DB::table('users')->where('id','!=',Auth::user()->id)->get();
-        //print_r($users);die;
+
         return view('messages.index', ['users' => $users]);
     }
 
@@ -77,8 +73,6 @@ class MessagesController extends APIBaseController
             ['whom_id', '=', $from->id],
         ])->get();
 
-       // return view('messages.view', ['from' => $from,'whom' => $whom,'fromAvatar' => $fromAvatar,'whomAvatar' => $whomAvatar,
-     //   'messages' => $messages]);
         return $this->sendResponse($messages->toArray(), 'Messages retrieved successfully.');
     }
 
