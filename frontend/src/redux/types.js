@@ -1,0 +1,10 @@
+export const AUTHENTICATE = 'AUTHENTICATE';
+export const UNAUTHENTICATE = 'UNAUTHENTICATE';
+export const LINK = 'LINK';
+export const UNLINK = 'UNLINK';
+export const TITLE = 'TITLE';
+export const UNTITLE = 'UNTITLE';
+export const SET_MAINIMG = 'SET_MAINIMG';
+export const UNSET_MAINIMG = 'UNSET_MAINIMG';
+export const SET_USERID = 'SET_USERID';
+export const UNSET_USERID = 'UNSET_USERID';

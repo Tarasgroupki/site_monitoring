@@ -3,29 +3,40 @@
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
 }
 
 .App-header {
-  background-color: #222;
+  background-color: #282c34;
   height: 200px;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
   color: white;
 }
 
-.App-title {
-  font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
+.App-link {
+  color: #61dafb;
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
+
 .image_avatar {
   height: 50px;
   width: 50px;
@@ -39,18 +50,10 @@
   color: red;
 }
 .profile_img {
-    height: 300px;
-    width: 400px
+  height: 300px;
+  width: 400px
 }
 .profile_field {
-    margin-left:35%;
-    width: 400px;
+  margin-left:35%;
+  width: 400px;
 }
-/*th,td {
-  width:200px;
-  border: 1px solid black;
-}
-.Form-table{
-  margin-left:30%;
-  margin-right:30%;
-}*/

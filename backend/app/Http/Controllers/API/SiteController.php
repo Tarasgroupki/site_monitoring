@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Sites;
 use Validator;
 
+//use App\Http\Controllers\API\APIBaseController;
+
 /**
  * Class LeadsController
  * @package App\Http\Controllers\API
@@ -161,18 +163,13 @@ name="additionalMetadata",
 class SiteController extends APIBaseController
 {
     public function index() {
-        $sites = Sites::all()->toArray();
+        $sites = Sites::all();
 
-        foreach ($sites as $key => $site) {
-            if($site['status'] == 0) {
-                $sites[$key]['status'] = 'Not Working';
-            }
-            else {
-                $sites[$key]['status'] = 'Working';
-            }
+        foreach ($sites as $key => $value) {
+            ($value['status'] == 1) ? $value['status'] = 'Active' : $value['status'] = 'Not Active';
         }
 
-        return $this->sendResponse($sites, 'Sites retrieved successfully.');
+        return $this->sendResponse($sites->toArray(), 'Sites retrieved successfully.');
     }
 
     public function store(Request $request)
@@ -184,6 +181,7 @@ class SiteController extends APIBaseController
             'period' => 'integer',
             'date_last_check' => 'string',
             'status' => 'string',
+            //'user_id' => 'integer'
         ]);
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());

@@ -1,22 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { Router, Switch, Route } from 'react-router-dom';
 import App from './App';
-import Profile from './profile/Profile';
-import NotFound from './NotFound.js';
-// import { Router } from "react-router";
-// import createHistory from "history/createBrowserHistory"
-import registerServiceWorker from './registerServiceWorker';
-import history from './history';
+import { Router, Switch, Route } from 'react-router-dom';
+import * as serviceWorker from './serviceWorker';
+import {compose, createStore} from "redux";
+import { Provider } from 'react-redux';
+import {rootReducer} from "./redux/rootReducer";
+import Profile from "./profile/Profile";
+import NotFound from "./not-fount/NotFound";
+import history from "./history";
 
-// const browserHistory = createHistory();
+const store = createStore(rootReducer, compose(
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+));
 
-ReactDOM.render(<Router history={history}>
-    <Switch>
-    <Route exact path="/" component={App} />
-    <Route path="/profile" component={Profile} />
-    <Route path="*" component={NotFound} />
-    </Switch>
-</Router>, document.getElementById('root'));
-registerServiceWorker();
+ReactDOM.render(
+    <Provider store={store}>
+            <Router history={history}>
+                    <Switch>
+                            <Route exact path="/" component={App}/>
+                            <Route path="/profile" component={Profile}/>
+                            <Route path="*" component={NotFound}/>
+                    </Switch>
+            </Router>
+    </Provider>,
+  document.getElementById('root')
+);
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();

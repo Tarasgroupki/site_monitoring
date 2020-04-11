@@ -12,6 +12,8 @@ use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+//use Spatie\Permission\Models\Role;
+//use Spatie\Permission\Models\Permission;
 use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\API\APIBaseController as APIBaseController;
 
@@ -109,7 +111,7 @@ class UsersController extends APIBaseController
 {
     public $successStatus = 200;
 
-    public function __construct() { }
+    public function __construct() {}
 
     public function actionLogin(Request $request) {
         $input = $request->all();
@@ -205,7 +207,7 @@ class UsersController extends APIBaseController
        $validator = Validator::make($input, [
             'name' => 'string|max:255',
             'email' => 'string|email|max:255|unique:users',
-            'password' => 'string|min:6|confirmed',
+            'password' => 'string|min:6|confirmed'
         ]);
 
         if($validator->fails()){
@@ -216,7 +218,7 @@ class UsersController extends APIBaseController
        $user = User::create([
             'name' => $input[0]['name'],
             'email' => $input[0]['email'],
-            'password' => bcrypt($input[0]['password']),
+            'password' => bcrypt($input[0]['password'])
         ]);
 
 
@@ -311,7 +313,7 @@ class UsersController extends APIBaseController
 
         $validator = Validator::make($input, [
             'name' => 'string|max:255',
-            'email' => 'string|email|max:255',
+            'email' => 'string|email|max:255'
         ]);
 
 
@@ -328,7 +330,9 @@ class UsersController extends APIBaseController
 
         $user->name = $input['name'];
         $user->email = $input['email'];
-
+        if(isset($input['avatar'])) {
+            $user->avatar = $input['avatar'];
+        }
         $user->save();
 
 
