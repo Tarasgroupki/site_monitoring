@@ -3,6 +3,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import {Link, Title, UnLink, UnTitle} from "../redux/actions";
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
+import "../Interceptor";
 
 function EmailValidator(value) {
   const response = { isValid: true, notification: { type: 'success', msg: '', title: '' } };
@@ -52,20 +53,18 @@ function LinkValidator(value) {
      }
 
      changeSites() {
-         if (localStorage.getItem('token') != null || this.props.auth !== null) {
-             fetch('http://localhost:8080/api/site', {
-                 method: 'get',
-                 headers: {
-                     'Content-Type': 'application/json',
-                     Accept: 'application/json',
-                     Authorization: `Bearer ${(localStorage.getItem('token')) ? localStorage.getItem('token') : this.props.auth}`,
-                 },
-             }).then((res) => res.json()).then((json) => {
-                 this.setState({
-                     items: Array.from(json.data),
-                 });
+         fetch('http://localhost:8080/api/site', {
+             method: 'get',
+             headers: {
+                 'Content-Type': 'application/json',
+                 Accept: 'application/json',
+             },
+         }).then((res) => res.json()).then((json) => {
+             console.log(json);
+             this.setState({
+                 items: Array.from(json.data),
              });
-         }
+         });
      }
 
      componentDidMount() {
@@ -95,7 +94,6 @@ function LinkValidator(value) {
                  headers: {
                      'Content-Type': 'application/json',
                      Accept: 'application/json',
-                     Authorization: `Bearer ${(localStorage.getItem('token')) ? localStorage.getItem('token') : this.props.auth}`,
                  },
                  body: JSON.stringify(row),
              }).then((res) => res.json()).then(() => {
@@ -110,7 +108,6 @@ function LinkValidator(value) {
                      headers: {
                          'Content-Type': 'application/json',
                          Accept: 'application/json',
-                         Authorization: `Bearer ${(localStorage.getItem('token')) ? localStorage.getItem('token') : this.props.auth}`,
                      },
                  }).then((response) => response.json().then((json) => json));
              }
@@ -125,7 +122,6 @@ function LinkValidator(value) {
                  headers: {
                      Accept: 'application/json',
                      'Content-Type': 'application/json',
-                     Authorization: `Bearer ${(localStorage.getItem('token')) ? localStorage.getItem('token') : this.props.auth}`,
                  },
              })
                  .then((response) => response.json().then((json) => json));
@@ -165,7 +161,7 @@ function LinkValidator(value) {
              </BootstrapTable>
          );
      }
- }
+     }
 
 const mapStateToProps = state => {
     return {
@@ -189,5 +185,7 @@ Table.propTypes = {
     Title: PropTypes.func,
     userId: PropTypes.string
 };
+
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(Table);

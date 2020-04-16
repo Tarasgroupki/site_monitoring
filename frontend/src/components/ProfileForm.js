@@ -3,7 +3,7 @@ import {Link, SetMainImg, Title, UnLink, UnSetMainImg, UnTitle} from "../redux/a
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
 import history from "../history";
-
+import "../Interceptor";
 
 class ProfileForm extends React.Component {
     constructor(props) {
@@ -51,7 +51,6 @@ class ProfileForm extends React.Component {
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             }).then((res) => res.json()).then((json) => {
                 this.setState({
@@ -74,9 +73,7 @@ class ProfileForm extends React.Component {
                 body: formData,
                 headers: {
                     Accept: 'application/json',
-                  //  Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
-
             }).then((res) => res.json()).then((file) => file).catch(err => err);
         }
         fetch(`http://localhost:8080/api/users/profile/${this.state.userId}`, {
@@ -84,7 +81,6 @@ class ProfileForm extends React.Component {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
             body: JSON.stringify(userObj),
         }).then((response) => response.json().then((json) => {this.setState({avatar: json.data.avatar});

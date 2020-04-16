@@ -15,7 +15,7 @@ const Profile = ({auth}) => {
                     <div>
                       {
                         (localStorage.getItem('token') == null || auth === null)
-                            ? null/*<button className="btn btn-info" onClick={this.openModal}>Login</button>*/
+                            ? null
                             : <PopoverWindow />
                       }
                     </div>

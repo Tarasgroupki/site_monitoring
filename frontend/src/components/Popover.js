@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 import PropTypes from 'prop-types';
 import history from "../history";
 
- class PopoverWindow extends React.Component {
+class PopoverWindow extends React.Component {
      constructor(props) {
          super(props);
          const avatar = JSON.parse(JSON.stringify(localStorage.getItem('avatar')));

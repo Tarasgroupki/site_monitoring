@@ -3,7 +3,6 @@ import {Authenticate, SetUserId} from "../redux/actions";
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
 
-
 class LoginForm extends React.Component {
     constructor(props) {
         super(props);
@@ -50,6 +49,7 @@ class LoginForm extends React.Component {
             });
             throw (error);
         });
+
         event.preventDefault();
     };
 

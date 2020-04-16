@@ -8,7 +8,7 @@ import {compose, createStore} from "redux";
 import { Provider } from 'react-redux';
 import {rootReducer} from "./redux/rootReducer";
 import Profile from "./profile/Profile";
-import NotFound from "./not-fount/NotFound";
+import NotFound from "./not-found/NotFound";
 import history from "./history";
 
 const store = createStore(rootReducer, compose(
