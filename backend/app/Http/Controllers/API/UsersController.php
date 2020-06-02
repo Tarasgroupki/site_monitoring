@@ -12,8 +12,6 @@ use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-//use Spatie\Permission\Models\Role;
-//use Spatie\Permission\Models\Permission;
 use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\API\APIBaseController as APIBaseController;
 
@@ -143,17 +141,17 @@ class UsersController extends APIBaseController
 
     public function getUserRoles($id) {
         $roles_all = Role::get();
-        foreach($roles_all as $key => $role):
+        foreach($roles_all as $key => $role) {
             $roles[$key] = $roles_all[$key]->getOriginal();
-        endforeach;
+        }
         $roles_ids = DB::select('select * from model_has_roles where model_id = ?',[$id]);
-        foreach($roles_ids as $key => $ids):
+        foreach($roles_ids as $key => $ids) {
             $roles_id[$ids->role_id] = $ids;
-        endforeach;
+        }
         $user_roles['roles'] = $roles;
-        if(isset($roles_id)):
-        $user_roles['roles_id'] = $roles_id;
-        endif;
+        if(isset($roles_id)) {
+            $user_roles['roles_id'] = $roles_id;
+        }
         return $this->sendResponse($user_roles, 'Roles got successfully!');
     }
 
@@ -162,16 +160,16 @@ class UsersController extends APIBaseController
 
         $user = User::find($id);
         $roles = $input;
-        if(isset($roles[0])):
-        foreach ($roles[0] as $key => $role) {
-            $user->assignRole($role);
+        if(isset($roles[0])) {
+            foreach ($roles[0] as $key => $role) {
+                $user->assignRole($role);
+            }
         }
-        endif;
-        if(isset($roles[1])):
-        foreach ($roles[1] as $key => $role) {
-            $user->removeRole($role);
+        if(isset($roles[1])) {
+            foreach ($roles[1] as $key => $role) {
+                $user->removeRole($role);
+            }
         }
-        endif;
 
         return $this->sendResponse($roles, 'Roles added to user successfully.');
     }
@@ -191,6 +189,7 @@ class UsersController extends APIBaseController
     public function index()
     {
         $users = User::all();
+
         return $this->sendResponse($users->toArray(), 'Posts retrieved successfully.');
     }
     /**
@@ -210,7 +209,7 @@ class UsersController extends APIBaseController
             'password' => 'string|min:6|confirmed'
         ]);
 
-        if($validator->fails()){
+        if($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
@@ -294,8 +293,9 @@ class UsersController extends APIBaseController
 
         $user->name = $input[0]['name'];
         $user->email = $input[0]['email'];
-        if(isset($input[0]['password'])): $user->password = bcrypt($input[0]['password']);
-        endif;
+        if(isset($input[0]['password'])) {
+            $user->password = bcrypt($input[0]['password']);
+        }
         $user->address = $input[0]['address'];
         $user->work_number = $input[0]['work_number'];
         $user->personal_number = $input[0]['personal_number'];

@@ -183,7 +183,7 @@ class SiteController extends APIBaseController
             'status' => 'string',
             //'user_id' => 'integer'
         ]);
-        if($validator->fails()){
+        if($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
         $client = Sites::create($input);

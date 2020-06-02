@@ -39,20 +39,19 @@ class CheckWebSites extends Command
     public function handle()
     {
         $sites = Sites::all();
-        foreach($sites as $key => $value):
+        foreach($sites as $key => $value) {
             echo $value['id'];
-        $site = Sites::find($value['id']);
-        $content = @file_get_contents($value['link']);
+            $site = Sites::find($value['id']);
+            $content = @file_get_contents($value['link']);
 
-        if($content) {
-            $site->status = 1;
-            echo "True";
+            if ($content) {
+                $site->status = 1;
+                echo "True";
+            } else {
+                $site->status = 0;
+                echo "False";
+            }
+            $site->save();
         }
-        else {
-            $site->status = 0;
-            echo "False";
-        }
-        $site->save();
-        endforeach;
     }
 }
